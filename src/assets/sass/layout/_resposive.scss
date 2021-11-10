@@ -1,0 +1,53 @@
+@media only screen and (max-width: 376px) {
+  section.page {
+    width: $mobile-size;
+    padding: 0;
+  }
+  nav {
+    margin: 30px;
+  }
+  .bill {
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    &__compute {
+      width: 100%;
+      min-height: 400px;
+      form {
+        .bill-total {
+          &--detail {
+            width: 100%;
+          }
+          > section {
+            width: 100%;
+            input {
+              width: 100%;
+            }
+          }
+        }
+        .bill-tip {
+          min-height: 150px;
+          section {
+            column-gap: 20px;
+            width: 100%;
+            justify-content: center;
+            margin: 10px auto 0;
+          }
+          .percent-tip__option {
+            height: 40px;
+            width: 120px;
+          }
+        }
+        .number-people {
+          section {
+            width: 100%;
+          }
+        }
+      }
+    }
+    &__result {
+      width: 100%;
+    }
+  }
+}
