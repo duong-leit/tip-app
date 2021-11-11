@@ -16,12 +16,11 @@ function BillInput(props) {
           </svg>
         </span>
         <input
-          type="number"
+          type="text"
           id="billTotal"
           onChange={handleInput}
           value={data.bill}
-          name="billInput"
-          step="0.01"
+          name="bill"
         />
       </section>
     </div>
@@ -38,9 +37,10 @@ function Button({ data, classTip, valueTip, handleTipBtn }) {
           (data.isCustomTip === false && data.tip === valueTip ? "active" : "")
         }
         id={"tip-option-" + valueTip}
-        name="tipOption"
-        defaultValue={valueTip}
-        onClick={handleTipBtn}
+        name="tip"
+        onClick={() => {
+          handleTipBtn(valueTip);
+        }}
       >
         {valueTip}%
       </button>
@@ -49,15 +49,8 @@ function Button({ data, classTip, valueTip, handleTipBtn }) {
 }
 
 function TipOption(props) {
-  const {
-    data,
-    handleInput,
-    minCustom,
-    step,
-    handleTipBtn,
-    optionList,
-    onFocusTipCustom,
-  } = props;
+  const { data, handleInput, handleTipBtn, optionList, onFocusTipCustom } =
+    props;
   let tipListBtn = [];
   let optionLength = optionList.length;
   for (let i = 0; i < optionLength; i++) {
@@ -80,13 +73,11 @@ function TipOption(props) {
           <input
             className="tip-option opt-custom"
             id="tipCustom"
-            name="tipCustom"
-            type="number"
+            name="tip"
+            type="text"
             placeholder="Custom"
-            min={minCustom}
-            step={step}
             onChange={handleInput}
-            value={data.isCustomTip}
+            value={data.isCustomTip ? data.tip : ""}
             onFocus={onFocusTipCustom}
           />
         </div>
@@ -101,7 +92,7 @@ function PeopleInput(props) {
     <div className="number-people">
       <label htmlFor="numberDivision">
         Number of People
-        <span>{messageValidata}</span>
+        <span className="error-number">{messageValidata}</span>
       </label>
       <section className="bill-total--details">
         <span>
@@ -113,13 +104,11 @@ function PeopleInput(props) {
           </svg>
         </span>
         <input
-          type="number"
-          name="peopleInput"
+          type="text"
+          name="people"
           id="numberDivision"
           onChange={handleInput}
           value={data.people}
-          step="1"
-          min="0"
         />
       </section>
     </div>

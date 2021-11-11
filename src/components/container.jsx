@@ -18,76 +18,78 @@ function Container() {
     totalAmount: "0.00",
   });
 
+  const [isCalculator, setCalculator] = useState(false);
+
   const [err, setErr] = useState({
     isErr: false,
     message: "",
   });
   const handleInput = (e) => {
-    if (e.target.name === "billInput") {
-      // neu data.people === 0 show message
-      if (Number(data.people) === 0 && Number(e.target.value) !== 0) {
-        setErr({ isErr: true, message: "can't be zero" });
-      } else {
-        setErr({ isErr: true, message: "" });
+    let inputName = e.target.name;
+    let inputValue = e.target.value;
+    let rgx = inputName !== "people" ? /^[0-9]*\.?[0-9]*$/ : /^[0-9]*$/;
+    if (rgx.test(inputValue) || inputValue === "") {
+      if (Number(inputValue) <= 10 ** 16) {
+        setData({ ...data, [inputName]: inputValue || 0, isChange: true });
       }
-      setData({ ...data, bill: e.target.value || 0, isChange: true });
-    }
-    if (e.target.name === "peopleInput") {
-      if (Number(data.bill) !== 0 && Number(e.target.value) === 0) {
-        setErr({ isErr: true, message: "can't be zero" });
-      } else {
-        setErr({ isErr: true, message: "" });
-      }
-      setData({ ...data, people: e.target.value || 0, isChange: true });
-    }
-    if (e.target.name === "tipCustom") {
-      setData({ ...data, tip: e.target.value || 0, isChange: true });
     }
   };
-  console.log(data);
   const onFocusTipCustom = (e) => {
-    setData({ ...data, tip: 0, isCustomTip: true });
-    console.log("abc:", data);
+    // neu isCustomTip == true, nothing
+    //false: setData
+    setData({ ...data, tip: 0, isCustomTip: true, isChange: true });
   };
-  const handleTipBtn = (e) => {
-    let tipBtnValue = e.target.id.slice(11);
-    if (Number(data.tip) !== Number(tipBtnValue)) {
-      setData({ ...data, tip: Number(tipBtnValue), isCustomTip: false });
+  const handleTipBtn = (value) => {
+    if (Number(data.tip) !== parseInt(value)) {
+      setData({
+        ...data,
+        tip: parseInt(value),
+        isCustomTip: false,
+      });
     } else {
+      if (data.isCustomTip) setData({ ...data, isCustomTip: false });
       setData({ ...data, tip: 0, isCustomTip: false });
     }
   };
   const handleSubmit = async (e) => {
     try {
-      if (!data.isChange) {
-        return;
-      }
-      if (Number(data.bill) === 0) {
-        setResult({
-          tipAmount: "0.00",
-          totalAmount: "0.00",
-        });
-      } else {
-        // setData({ ...data, isChange: false });
-        let results = await fetch(
-          `${url}calculate?bill=${Number(data.bill)}&people=${Number(
-            data.people
-          )}&tipPercent=${Number(data.tip)}`
-        );
-        results = await results.json();
-        if (results["result"]) {
+      setCalculator(true);
+      if (data.isChange) {
+        if (Number(data.people) === 0 && Number(data.bill) !== 0) {
+          setErr({ isErr: true, message: "can't be zero" });
+        } else {
+          setErr({ isErr: true, message: "" });
+        }
+
+        if (Number(data.bill) === 0) {
           setResult({
-            tipAmount: results["amount"].toFixed(2),
-            totalAmount: results["total"].toFixed(2),
+            tipAmount: "0.00",
+            totalAmount: "0.00",
           });
+        } else {
+          setData({ ...data, isChange: false });
+          let results = await fetch(
+            `${url}calculate?bill=${Number(data.bill)}&people=${Number(
+              data.people
+            )}&tipPercent=${Number(data.tip)}`
+          );
+          results = await results.json();
+          if (results["result"]) {
+            setResult({
+              tipAmount: results["amount"].toFixed(2),
+              totalAmount: results["total"].toFixed(2),
+            });
+          }
         }
       }
+      setCalculator(false);
     } catch (error) {
       alert("try it later");
     }
   };
   const onClickReset = (e) => {
     setData({ bill: 0, people: 0, tip: 0, isCustomTip: false });
+    setErr({ isErr: false, message: "" });
     setResult({ tipAmount: "0.00", totalAmount: "0.00" });
   };
   return (
@@ -107,6 +109,7 @@ function Container() {
         handleSubmit={handleSubmit}
         resultCal={resultCal}
         onClickReset={onClickReset}
+        isCalculator={isCalculator}
       />
     </section>
   );
@@ -122,7 +125,7 @@ function BillCompute(props) {
         <TipOption
           optionList={tipList}
           minCustom="0"
-          step="0"
+          step="0.01"
           data={data}
           handleInput={handleInput}
           handleTipBtn={handleTipBtn}
@@ -138,12 +141,19 @@ function BillCompute(props) {
   );
 }
 function BillResult(props) {
-  const { handleSubmit, resultCal, onClickReset } = props;
+  const { handleSubmit, resultCal, onClickReset, isCalculator } = props;
   return (
     <div className="bill__result">
-      <TipAmount tipAmount={resultCal.tipAmount} />
-      <TotalAmount totalAmount={resultCal.totalAmount} />
-      <AccessBtn handleSubmit={handleSubmit} onClickReset={onClickReset} />
+      <TipAmount tipAmount={resultCal.tipAmount} isCalculator={isCalculator} />
+      <TotalAmount
+        totalAmount={resultCal.totalAmount}
+        isCalculator={isCalculator}
+      />
+      <AccessBtn
+        handleSubmit={handleSubmit}
+        onClickReset={onClickReset}
+        isCalculator={isCalculator}
+      />
     </div>
   );
 }
