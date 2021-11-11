@@ -118,9 +118,9 @@ nav {
       .number-people {
         label {
           .error-number {
-            display: none;
             color: red;
             font-size: 14px;
+            margin: 40px;
           }
         }
         > section {
@@ -213,17 +213,21 @@ nav {
           background-color: $strong-cyan;
           color: $very-dark-cyan;
         }
+        &:disabled {
+          background-color: $dark-grayish-cyan;
+          color: $very-dark-cyan;
+        }
       }
     }
   }
 }
-input[type="number"] {
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-}
+// input[type="number"] {
+//   &::-webkit-outer-spin-button,
+//   &::-webkit-inner-spin-button {
+//     -webkit-appearance: none;
+//     margin: 0;
+//   }
+// }
 button:hover {
   opacity: 0.8;
 }
