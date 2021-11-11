@@ -35,8 +35,6 @@ function Container() {
     }
   };
   const onFocusTipCustom = (e) => {
-    // neu isCustomTip == true, nothing
-    //false: setData
     setData({ ...data, tip: 0, isCustomTip: true, isChange: true });
   };
   const handleTipBtn = (value) => {
@@ -45,6 +43,7 @@ function Container() {
         ...data,
         tip: parseInt(value),
         isCustomTip: false,
+        isChange: true,
       });
     } else {
       if (data.isCustomTip) setData({ ...data, isCustomTip: false });
