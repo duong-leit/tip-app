@@ -1,16 +1,16 @@
-function TipAmount() {
+function TipAmount({ tipAmount }) {
   return (
     <section>
       <label htmlFor="tipPerPerson">
         <span>Tip Amount</span>
         <span>/ person</span>
       </label>
-      <input type="text" id="tipPerPerson" value="0.00" readOnly />
+      <input type="text" id="tipPerPerson" value={tipAmount} readOnly />
     </section>
   );
 }
 
-function TotalAmount() {
+function TotalAmount({ totalAmount }) {
   return (
     <section>
       <label htmlFor="totalPerPerson">
@@ -20,20 +20,20 @@ function TotalAmount() {
       <input
         type=" text"
         id="totalPerPerson"
-        value="0.00"
+        value={totalAmount}
         step="any"
         readOnly
       />
     </section>
   );
 }
-function AccessBtn() {
+function AccessBtn({ handleSubmit, onClickReset }) {
   return (
     <section>
-      <button type="button" id="btn-reset">
+      <button type="button" id="btn-reset" onClick={onClickReset}>
         RESET
       </button>
-      <button type="button" id="btn-submit">
+      <button type="button" id="btn-submit" onClick={handleSubmit}>
         SUBMIT
       </button>
     </section>

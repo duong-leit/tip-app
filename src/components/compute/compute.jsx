@@ -1,6 +1,8 @@
 import React from "react";
 
-function BillInput() {
+function BillInput(props) {
+  const { data, handleInput } = props;
+
   return (
     <div className="bill-total">
       <label htmlFor="billTotal">Bill</label>
@@ -15,10 +17,10 @@ function BillInput() {
         </span>
         <input
           type="number"
-          name="billTotal"
           id="billTotal"
-          defaultValue="0"
-          min="0.00"
+          onChange={handleInput}
+          value={data.bill}
+          name="billInput"
           step="0.01"
         />
       </section>
@@ -26,15 +28,19 @@ function BillInput() {
   );
 }
 
-function Button({ classTip, valueTip }) {
+function Button({ data, classTip, valueTip, handleTipBtn }) {
   return (
     <div className={classTip}>
       <button
         type="button"
-        className="tip-option"
+        className={
+          "tip-option " +
+          (data.isCustomTip === false && data.tip === valueTip ? "active" : "")
+        }
         id={"tip-option-" + valueTip}
         name="tipOption"
-        value={valueTip}
+        defaultValue={valueTip}
+        onClick={handleTipBtn}
       >
         {valueTip}%
       </button>
@@ -43,14 +49,25 @@ function Button({ classTip, valueTip }) {
 }
 
 function TipOption(props) {
+  const {
+    data,
+    handleInput,
+    minCustom,
+    step,
+    handleTipBtn,
+    optionList,
+    onFocusTipCustom,
+  } = props;
   let tipListBtn = [];
-  let optionLength = props.optionList.length;
+  let optionLength = optionList.length;
   for (let i = 0; i < optionLength; i++) {
     tipListBtn.push(
       <Button
         key={i}
+        data={data}
         classTip="percent-tip__option"
-        valueTip={props.optionList[i]}
+        valueTip={optionList[i]}
+        handleTipBtn={handleTipBtn}
       />
     );
   }
@@ -66,8 +83,11 @@ function TipOption(props) {
             name="tipCustom"
             type="number"
             placeholder="Custom"
-            min={props.minCustom}
-            step={props.step}
+            min={minCustom}
+            step={step}
+            onChange={handleInput}
+            value={data.isCustomTip}
+            onFocus={onFocusTipCustom}
           />
         </div>
       </section>
@@ -75,12 +95,13 @@ function TipOption(props) {
   );
 }
 
-function PeopleInput() {
+function PeopleInput(props) {
+  const { data, handleInput, messageValidata } = props;
   return (
     <div className="number-people">
       <label htmlFor="numberDivision">
         Number of People
-        <span className="error-number">can't be zero</span>
+        <span>{messageValidata}</span>
       </label>
       <section className="bill-total--details">
         <span>
@@ -93,9 +114,10 @@ function PeopleInput() {
         </span>
         <input
           type="number"
-          name="people"
+          name="peopleInput"
           id="numberDivision"
-          defaultValue="0"
+          onChange={handleInput}
+          value={data.people}
           step="1"
           min="0"
         />
