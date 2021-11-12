@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { BillInput, TipOption, PeopleInput } from "./compute/Compute";
-import { TipAmount, TotalAmount, AccessBtn } from "./result/Result";
-import { dataContext, IsProcessProvider } from "./Context";
+import { BillResult } from "./result/Result";
+import { dataContext } from "./Context";
 
 const tipList = [5, 10, 15, 25, 50];
 
@@ -16,23 +16,7 @@ function Container() {
 
 function BillCompute(props) {
   const { messageValidata, handleTipBtn, onFocusTipCustom } = props;
-
-  const { data, setData } = useContext(dataContext);
-
-  const handleInput = (e) => {
-    let inputName = e.target.name;
-    let inputValue = e.target.value;
-    let rgx = inputName !== "people" ? /^[0-9]*\.?[0-9]*$/ : /^[0-9]*$/;
-    if (rgx.test(inputValue) || inputValue === "") {
-      if (Number(inputValue) <= 10 ** 16) {
-        setData({
-          ...data,
-          [inputName]: inputValue || 0,
-          isChange: true,
-        });
-      }
-    }
-  };
+  const { data, handleInput } = useContext(dataContext);
 
   return (
     <div className="bill__compute">
@@ -56,15 +40,5 @@ function BillCompute(props) {
     </div>
   );
 }
-function BillResult() {
-  return (
-    <IsProcessProvider>
-      <div className="bill__result">
-        <TipAmount />
-        <TotalAmount />
-        <AccessBtn />
-      </div>
-    </IsProcessProvider>
-  );
-}
+
 export default Container;

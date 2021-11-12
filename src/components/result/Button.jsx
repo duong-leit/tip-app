@@ -1,10 +1,14 @@
 import React from "react";
 
-function Button({ typeBtn, id, name, onClick, isdisabled }) {
+function Button({ btnList }) {
   return (
-    <button type={typeBtn} id={id} onClick={onClick} disabled={isdisabled}>
-      {name}
-    </button>
+    <>
+      {btnList.map((element, index) => (
+        <button key={index} {...element.attribute}>
+          {element.context}
+        </button>
+      ))}
+    </>
   );
 }
 
