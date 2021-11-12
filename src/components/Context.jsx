@@ -39,47 +39,43 @@ function HandleDataProvider({ children }) {
 
   const handleSubmit = async (e) => {
     try {
-      if (canProcess.isChange && !canProcess.isCalculator) {
-        //is Change Input
-        setProcess({ ...canProcess, isChange: false });
-        if (Number(data.people) === 0) {
-          if (Number(data.bill) === 0) {
-            alert("bill and people cannot be empty.");
-            onClickReset();
-          } else {
-            setErr({
-              isErr: true,
-              message: "can't be zero",
-            });
-          }
-          return;
-        }
-        setErr({
-          isErr: true,
-          message: "",
-        });
-        setProcess({ ...canProcess, isCalculator: true });
-
-        let results = await fetch(
-          `${url}calculate?bill=${Number(data.bill)}&people=${Number(
-            data.people
-          )}&tipPercent=${Number(data.tip)}`
-        );
-        results = await results.json();
-        if (results["result"]) {
-          setResult({
-            tipAmount: results["amount"].toFixed(2),
-            totalAmount: results["total"].toFixed(2),
-          });
+      console.log("data:", data);
+      console.log("data:", canProcess.isChange, canProcess.isCalculator);
+      //is Change Input
+      setProcess({ ...canProcess, isChange: false });
+      if (Number(data.people) === 0) {
+        if (Number(data.bill) === 0) {
+          alert("bill and people cannot be empty.");
+          onClickReset();
         } else {
-          alert("something wrong.");
+          setErr({
+            isErr: true,
+            message: "can't be zero",
+          });
         }
-        // }
-        setProcess({ isChange: false, isCalculator: false });
-      } else {
-        alert("bill and people cannot be empty.");
-        onClickReset();
+        return;
       }
+      setErr({
+        isErr: true,
+        message: "",
+      });
+      setProcess({ ...canProcess, isCalculator: true });
+
+      let results = await fetch(
+        `${url}calculate?bill=${Number(data.bill)}&people=${Number(
+          data.people
+        )}&tipPercent=${Number(data.tip)}`
+      );
+      results = await results.json();
+      if (results["result"]) {
+        setResult({
+          tipAmount: results["amount"].toFixed(2),
+          totalAmount: results["total"].toFixed(2),
+        });
+      } else {
+        alert("maybe bill and number of people is invalid.");
+      }
+      setProcess({ isChange: false, isCalculator: false });
     } catch (error) {
       alert("try it later");
     }
