@@ -39,8 +39,8 @@ function HandleDataProvider({ children }) {
 
   const handleSubmit = async (e) => {
     try {
-      console.log("data:", data);
-      console.log("data:", canProcess.isChange, canProcess.isCalculator);
+      // console.log("data:", data);
+      // console.log("data:", canProcess.isChange, canProcess.isCalculator);
       //is Change Input
       setProcess({ ...canProcess, isChange: false });
       if (Number(data.people) === 0) {

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { BillInput, TipOption, PeopleInput } from "./compute/Compute";
-import { BillResult } from "./result/Result";
+import { BillInput, TipOption, PeopleInput } from "./compute/compute";
+import { BillResult } from "./result/cesult";
 import { dataContext } from "./Context";
 
 const tipList = [5, 10, 15, 25, 50];
